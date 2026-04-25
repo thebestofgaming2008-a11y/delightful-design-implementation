@@ -98,7 +98,7 @@ const Index = () => {
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
           style={{
-            top: "-1vw",
+            top: "-6vw",
             left: "-11.04vw",
             width: "29.04vw",
             height: "auto",
@@ -111,8 +111,8 @@ const Index = () => {
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
           style={{
-            top: "-1vw",
-            right: "-18vw",
+            top: "-6vw",
+            right: "-14vw",
             width: "28.84vw",
             height: "auto",
             objectFit: "contain",
