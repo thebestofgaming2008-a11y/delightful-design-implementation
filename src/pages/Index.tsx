@@ -31,7 +31,7 @@ const Index = () => {
       <header className="relative z-20 border-b border-[hsl(0_0%_0%_/_0.17)] bg-header-surface shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
         <div className="mx-auto max-w-[1440px] px-4 pt-2 pb-2 md:px-8 md:pt-3 md:pb-3 relative">
           {/* Account / Cart - top right */}
-          <div className="absolute right-4 md:right-8 top-2 md:top-3 flex items-center gap-3 md:gap-5">
+          <div className="absolute right-4 md:right-8 top-2 md:top-3 gap-3 md:gap-5 flex-row flex items-center justify-center px-0 my-[56px]">
             <button type="button" aria-label="Account" className="text-foreground hover:text-brand transition-colors">
               <User className="h-5 w-5 md:h-6 md:w-6" />
             </button>
@@ -51,7 +51,7 @@ const Index = () => {
 
           {/* Centered search */}
           <div className="mt-1 flex justify-center">
-            <label className="flex items-center gap-2 rounded-full bg-placeholder/70 px-3 py-1 w-full max-w-[520px] border border-[hsl(0_0%_60%_/_0.3)]">
+            <label className="flex items-center gap-2 rounded-full bg-placeholder/70 py-1 w-full max-w-[520px] border border-[hsl(0_0%_60%_/_0.3)] mr-0 mx-[5px] ml-px px-[11px]">
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 type="search"
@@ -78,7 +78,7 @@ const Index = () => {
                   >
                     {link}
                     {active && (
-                      <span className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-hero-foreground rounded-full" />
+                      <span className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-hero-foreground rounded-full my-0 mt-[16px] mb-[3px] mr-0 ml-0 px-0 py-0" />
                     )}
                   </a>
                 </li>
