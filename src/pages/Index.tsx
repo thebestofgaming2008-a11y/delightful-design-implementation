@@ -1,5 +1,6 @@
 import { ArrowRight, ChevronDown, Search, ShoppingCart, User } from "lucide-react";
-import calligraphy from "@/assets/calligraphy.png";
+import calligraphyLeft from "@/assets/calligraphy-left.png";
+import calligraphyRight from "@/assets/calligraphy-right.png";
 import logo from "@/assets/logo-header.png";
 
 const NAV_LINKS = ["All products", "Books", "Clothing", "Track order"];
@@ -92,17 +93,17 @@ const Index = () => {
       <section className="relative overflow-hidden bg-hero">
         {/* Decorative calligraphy - sits in hero corners just under header */}
         <img
-          src={calligraphy}
+          src={calligraphyLeft}
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute top-0 left-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90"
           style={{ objectFit: "contain", objectPosition: "left top" }}
         />
         <img
-          src={calligraphy}
+          src={calligraphyRight}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-0 right-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90 scale-x-[-1]"
+          className="pointer-events-none select-none absolute top-0 right-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90"
           style={{ objectFit: "contain", objectPosition: "right top" }}
         />
 
