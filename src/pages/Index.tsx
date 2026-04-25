@@ -91,20 +91,32 @@ const Index = () => {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero">
-        {/* Decorative calligraphy - sits in hero corners just under header */}
+        {/* Decorative calligraphy - matches Figma 1920 frame: container left -212, top 26, sides 557/553 wide */}
         <img
           src={calligraphyLeft}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-0 left-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90"
-          style={{ objectFit: "contain", objectPosition: "left top" }}
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{
+            top: "1.35vw",
+            left: "-11.04vw",
+            width: "29.04vw",
+            height: "auto",
+            objectFit: "contain",
+          }}
         />
         <img
           src={calligraphyRight}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute top-0 right-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90"
-          style={{ objectFit: "contain", objectPosition: "right top" }}
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{
+            top: "1.35vw",
+            right: "-20.98vw",
+            width: "28.84vw",
+            height: "auto",
+            objectFit: "contain",
+          }}
         />
 
             <div className="relative mx-auto max-w-[1440px] px-4 py-10 md:py-16 lg:py-20 text-center">
