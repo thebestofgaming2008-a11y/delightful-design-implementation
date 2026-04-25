@@ -29,30 +29,9 @@ const Index = () => {
 
       {/* Header */}
       <header className="relative z-20 border-b border-[hsl(0_0%_0%_/_0.17)] bg-header-surface shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
-        <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 py-2 md:px-8 md:py-3">
-          <a href="/" className="flex items-center gap-2 shrink-0" aria-label="Hurayrah Essentials home">
-            <img
-              src={logo}
-              alt="Hurayrah Essentials"
-              width={56}
-              height={56}
-               className="h-12 w-12 md:h-14 md:w-14 object-contain mt-0 px-0 py-0"
-            />
-          </a>
-
-          <div className="flex-1 flex justify-center">
-            <label className="flex items-center gap-2 rounded-full bg-placeholder/70 px-3 py-1.5 w-full max-w-[460px] border border-[hsl(0_0%_60%_/_0.3)]">
-              <Search className="h-3.5 w-3.5 text-muted-foreground" />
-              <input
-                type="search"
-                 placeholder="the book of monotheism..."
-                 className="bg-transparent flex-1 md:text-sm outline-none placeholder:text-[hsl(225_8%_33%)] text-xs"
-                aria-label="Search products"
-              />
-            </label>
-          </div>
-
-          <div className="flex items-center gap-3 md:gap-5 shrink-0">
+        <div className="mx-auto max-w-[1440px] px-4 pt-2 pb-2 md:px-8 md:pt-3 md:pb-3 relative">
+          {/* Account / Cart - top right */}
+          <div className="absolute right-4 md:right-8 top-2 md:top-3 flex items-center gap-3 md:gap-5">
             <button type="button" aria-label="Account" className="text-foreground hover:text-brand transition-colors">
               <User className="h-5 w-5 md:h-6 md:w-6" />
             </button>
@@ -60,10 +39,32 @@ const Index = () => {
               <ShoppingCart className="h-5 w-5 md:h-6 md:w-6" />
             </button>
           </div>
+
+          {/* Centered logo */}
+          <a href="/" className="flex justify-center" aria-label="Hurayrah Essentials home">
+            <img
+              src={logo}
+              alt="Hurayrah Essentials"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
+          </a>
+
+          {/* Centered search */}
+          <div className="mt-1 flex justify-center">
+            <label className="flex items-center gap-2 rounded-full bg-placeholder/70 px-3 py-1 w-full max-w-[520px] border border-[hsl(0_0%_60%_/_0.3)]">
+              <Search className="h-3.5 w-3.5 text-muted-foreground" />
+              <input
+                type="search"
+                placeholder="the book of monotheism..."
+                className="bg-transparent flex-1 md:text-sm outline-none placeholder:text-[hsl(225_8%_33%)] text-xs"
+                aria-label="Search products"
+              />
+            </label>
+          </div>
         </div>
 
         {/* Nav */}
-        <nav className="mx-auto max-w-[1440px] px-4 pb-2 md:px-8 md:pb-3">
+        <nav className="mx-auto max-w-[1440px] px-4 pb-2 md:px-8 md:pb-2">
            <ul className="md:gap-10 text-sm md:text-base gap-[40px] flex-row flex items-center justify-center">
             {NAV_LINKS.map((link, i) => {
               const active = i === 0;
@@ -89,25 +90,27 @@ const Index = () => {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero">
-        {/* Decorative calligraphy corners */}
+        {/* Decorative calligraphy - sits in hero corners just under header */}
         <img
           src={calligraphy}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute -top-8 -left-12 w-[180px] sm:w-[260px] md:w-[420px] lg:w-[520px] opacity-90 -rotate-[32deg]"
+          className="pointer-events-none select-none absolute top-0 left-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90"
+          style={{ objectFit: "contain", objectPosition: "left top" }}
         />
         <img
           src={calligraphy}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute -top-4 -right-12 w-[160px] sm:w-[240px] md:w-[400px] lg:w-[500px] opacity-90 rotate-[47deg]"
+          className="pointer-events-none select-none absolute top-0 right-0 w-[140px] sm:w-[200px] md:w-[300px] lg:w-[380px] opacity-90 scale-x-[-1]"
+          style={{ objectFit: "contain", objectPosition: "right top" }}
         />
 
-            <div className="relative mx-auto max-w-[1440px] px-4 py-12 md:py-20 lg:py-28 shadow-none border-[#f2ff00] border-0 text-center">
-           <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[1.05] text-center pt-0 pb-0 pr-0">
+            <div className="relative mx-auto max-w-[1440px] px-4 py-10 md:py-16 lg:py-20 text-center">
+           <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[0.95] text-center">
             SEEK KNOWLEDGE
           </h1>
-           <p className="mt-1 md:mt-2 text-hero-foreground tracking-tight text-[clamp(2.5rem,8vw,7.625rem)] leading-[1.05] text-center py-0">
+           <p className="text-hero-foreground tracking-tight text-[clamp(2.5rem,8vw,7.625rem)] leading-[0.95] text-center -mt-1 md:-mt-2">
             AFFORDABLY.
           </p>
 
