@@ -65,7 +65,7 @@ const Index = () => {
         </div>
 
         {/* Nav */}
-        <nav className="mx-auto max-w-[1440px] px-4 pb-2 md:px-8 md:pb-2">
+        <nav className="mx-auto max-w-[1440px] px-4 pb-0 md:px-8 md:pb-0">
            <ul className="md:gap-10 text-sm md:text-base gap-[40px] flex-row flex items-center justify-center">
             {NAV_LINKS.map((link, i) => {
               const active = i === 0;
@@ -73,13 +73,13 @@ const Index = () => {
                 <li key={link}>
                   <a
                     href="#"
-                    className={`relative inline-block py-1 transition-colors ${
+                    className={`relative inline-block pt-1 pb-2 transition-colors ${
                       active ? "text-hero-foreground" : "text-foreground hover:text-brand"
                     }`}
                   >
                     {link}
                     {active && (
-                      <span className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-hero-foreground rounded-full my-0 mt-[16px] mb-[3px] mr-0 ml-0 px-0 py-0" />
+                      <span className="absolute -bottom-[1px] left-0 h-[2px] w-full bg-hero-foreground rounded-full" />
                     )}
                   </a>
                 </li>
@@ -98,7 +98,7 @@ const Index = () => {
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
           style={{
-            top: "1.35vw",
+            top: "-1vw",
             left: "-11.04vw",
             width: "29.04vw",
             height: "auto",
@@ -111,8 +111,8 @@ const Index = () => {
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
           style={{
-            top: "1.35vw",
-            right: "-20.98vw",
+            top: "-1vw",
+            right: "-18vw",
             width: "28.84vw",
             height: "auto",
             objectFit: "contain",
