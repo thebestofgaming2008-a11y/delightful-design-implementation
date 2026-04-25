@@ -103,15 +103,15 @@ const Index = () => {
           className="pointer-events-none select-none absolute -top-4 -right-12 w-[160px] sm:w-[240px] md:w-[400px] lg:w-[500px] opacity-90 rotate-[47deg]"
         />
 
-           <div className="relative mx-auto max-w-[1440px] px-4 py-12 md:py-20 lg:py-28">
-          <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[1.05]">
+            <div className="relative mx-auto max-w-[1440px] px-4 py-12 md:py-20 lg:py-28 shadow-none border-[#f2ff00] border-0 text-center">
+           <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[1.05] text-center pt-0 pb-0 pr-0">
             SEEK KNOWLEDGE
           </h1>
-          <p className="mt-1 md:mt-2 text-hero-foreground tracking-tight text-[clamp(2.5rem,8vw,7.625rem)] leading-[1.05]">
+           <p className="mt-1 md:mt-2 text-hero-foreground tracking-tight text-[clamp(2.5rem,8vw,7.625rem)] leading-[1.05] text-center py-0">
             AFFORDABLY.
           </p>
 
-          <p className="mt-4 md:mt-6 text-[hsl(0_0%_0%_/_0.6)] text-[clamp(0.875rem,1.6vw,2.375rem)] tracking-tight">
+           <p className="mt-4 md:mt-6 text-[hsl(0_0%_0%_/_0.6)] text-[clamp(0.875rem,1.6vw,2.375rem)] tracking-tight text-center">
             Seeking knowledge made easy.
           </p>
 
