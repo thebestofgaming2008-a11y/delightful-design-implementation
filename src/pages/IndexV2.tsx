@@ -1,57 +1,54 @@
-import { ArrowRight, ChevronDown, Heart, Search, ShoppingBag, Sparkles, User } from "lucide-react";
+import { ArrowRight, ChevronDown, Heart, Menu, Search, ShoppingBag, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import calligraphyLeft from "@/assets/calligraphy-left.png";
 import calligraphyRight from "@/assets/calligraphy-right.png";
 import logo from "@/assets/logo-header.png";
 
 const NAV_LINKS = ["All products", "Books", "Clothing", "Track order"];
-const GUARANTEES = [
-  { label: "Authentic titles", icon: Sparkles },
-  { label: "International shipping", icon: ArrowRight },
-  { label: "Secure checkout", icon: Heart },
-];
+const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
+const CATEGORIES = ["Books", "Clothes", "Essentials"];
 
 const IndexV2 = () => {
   return (
     <main className="min-h-screen bg-background">
       {/* Notice bar */}
-      <div className="bg-brand text-brand-foreground relative z-30">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-1.5 text-[11px] sm:text-xs md:text-sm">
+      <div className="bg-hero shadow-[0_4px_4px_rgba(0,0,0,0.08)] relative z-30">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-1 text-[11px] sm:text-xs md:text-sm">
           <span className="hidden sm:block w-[60px]" aria-hidden />
-          <p className="flex-1 text-center tracking-wide">
-            Free worldwide shipping over ₹2,500 — International orders may incur customs duties
+          <p className="flex-1 text-center text-foreground">
+            International orders may incur customs/import duties
           </p>
           <button
             type="button"
-            className="flex items-center gap-1 rounded-full border border-brand-foreground/20 px-2.5 py-0.5 hover:bg-brand-foreground/10 transition-colors"
+            className="flex items-center gap-1 rounded-sm border border-transparent px-2 py-0.5 text-foreground hover:border-border transition-colors"
             aria-label="Select currency"
           >
-            <span>INR ₹</span>
             <ChevronDown className="h-3 w-3" />
+            <span>INR ₹</span>
           </button>
         </div>
       </div>
 
       {/* Header */}
       <header className="relative z-20 border-b border-border bg-header-surface/80 backdrop-blur-md">
-        <div className="mx-auto max-w-[1440px] grid grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-3 md:px-8 md:py-4">
-          {/* Search left */}
-          <div className="hidden md:flex justify-start">
-            <label className="group flex items-center gap-2 rounded-full bg-background/80 border border-border px-4 py-2 w-full max-w-[360px] focus-within:border-brand transition-colors">
+        <div className="mx-auto max-w-[1440px] grid grid-cols-[auto_1fr_auto] items-center gap-3 md:gap-6 px-4 py-3 md:px-8 md:py-4">
+          {/* Logo left */}
+          <Link to="/v2" className="flex items-center" aria-label="Hurayrah Essentials home">
+            <img src={logo} alt="Hurayrah Essentials" className="h-10 md:h-12 w-auto object-contain" />
+          </Link>
+
+          {/* Centered search */}
+          <div className="hidden md:flex justify-center">
+            <label className="group flex items-center gap-2 rounded-full bg-placeholder/70 border border-[hsl(0_0%_60%_/_0.3)] px-4 py-2 w-full max-w-[520px] focus-within:border-brand transition-colors">
               <Search className="h-4 w-4 text-muted-foreground group-focus-within:text-brand transition-colors" />
               <input
                 type="search"
-                placeholder="Search the book of monotheism…"
-                className="bg-transparent flex-1 text-sm outline-none placeholder:text-muted-foreground"
+                placeholder="the book of monotheism..."
+                className="bg-transparent flex-1 text-sm outline-none placeholder:text-[hsl(225_8%_33%)]"
                 aria-label="Search products"
               />
             </label>
           </div>
-
-          {/* Centered logo */}
-          <Link to="/v2" className="flex justify-center" aria-label="Hurayrah Essentials home">
-            <img src={logo} alt="Hurayrah Essentials" className="h-11 md:h-14 w-auto object-contain" />
-          </Link>
 
           {/* Account / Cart right */}
           <div className="flex items-center justify-end gap-1 md:gap-2">
@@ -65,7 +62,7 @@ const IndexV2 = () => {
             <button
               type="button"
               aria-label="Account"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
+              className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
             >
               <User className="h-5 w-5" />
             </button>
@@ -76,21 +73,28 @@ const IndexV2 = () => {
             >
               <ShoppingBag className="h-4 w-4" />
               <span className="text-sm font-medium hidden sm:inline">Cart</span>
-              <span className="absolute -top-1 -right-1 md:static md:ml-1 h-5 min-w-[20px] px-1 grid place-items-center rounded-full bg-background text-foreground text-[10px] font-semibold border border-brand">
+              <span className="md:ml-1 h-5 min-w-[20px] px-1 grid place-items-center rounded-full bg-background text-foreground text-[10px] font-semibold border border-brand">
                 0
               </span>
+            </button>
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
+            >
+              <Menu className="h-5 w-5" />
             </button>
           </div>
         </div>
 
         {/* Mobile search */}
         <div className="md:hidden px-4 pb-3">
-          <label className="flex items-center gap-2 rounded-full bg-background/80 border border-border px-4 py-2">
+          <label className="flex items-center gap-2 rounded-full bg-placeholder/70 border border-[hsl(0_0%_60%_/_0.3)] px-4 py-2">
             <Search className="h-4 w-4 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Search…"
-              className="bg-transparent flex-1 text-sm outline-none placeholder:text-muted-foreground"
+              placeholder="the book of monotheism..."
+              className="bg-transparent flex-1 text-sm outline-none placeholder:text-[hsl(225_8%_33%)]"
               aria-label="Search products"
             />
           </label>
@@ -98,11 +102,11 @@ const IndexV2 = () => {
 
         {/* Nav */}
         <nav className="border-t border-border/60">
-          <ul className="mx-auto max-w-[1440px] flex items-center justify-center gap-6 md:gap-12 px-4 md:px-8 text-sm md:text-base">
+          <ul className="mx-auto max-w-[1440px] flex items-center justify-center gap-6 md:gap-10 px-4 md:px-8 text-sm md:text-base overflow-x-auto">
             {NAV_LINKS.map((link, i) => {
               const active = i === 0;
               return (
-                <li key={link}>
+                <li key={link} className="shrink-0">
                   <a
                     href="#"
                     className={`relative inline-block py-3 transition-colors ${
@@ -128,15 +132,15 @@ const IndexV2 = () => {
           src={calligraphyLeft}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute opacity-80"
-          style={{ top: "-5vw", left: "-9vw", width: "26vw", height: "auto" }}
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{ top: "-6vw", left: "-11.04vw", width: "29.04vw", height: "auto" }}
         />
         <img
           src={calligraphyRight}
           alt=""
           aria-hidden
-          className="pointer-events-none select-none absolute opacity-80"
-          style={{ top: "-5vw", right: "-12vw", width: "26vw", height: "auto" }}
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{ top: "-6vw", right: "-14vw", width: "28.84vw", height: "auto" }}
         />
 
         {/* Soft glow */}
@@ -149,12 +153,7 @@ const IndexV2 = () => {
           }}
         />
 
-        <div className="relative mx-auto max-w-[1440px] px-4 py-14 md:py-20 lg:py-28 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-background/50 px-3 py-1 text-xs md:text-sm text-hero-foreground backdrop-blur-sm mb-5 md:mb-7">
-            <Sparkles className="h-3.5 w-3.5" />
-            New arrivals — Spring collection
-          </span>
-
+        <div className="relative mx-auto max-w-[1440px] px-4 py-12 md:py-20 lg:py-24 text-center">
           <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[0.95]">
             SEEK KNOWLEDGE
           </h1>
@@ -162,11 +161,17 @@ const IndexV2 = () => {
             AFFORDABLY.
           </p>
 
-          <p className="mt-5 md:mt-7 mx-auto max-w-2xl text-foreground/70 text-base md:text-xl tracking-tight">
-            Carefully curated Islamic books and essentials — delivered worldwide at honest prices.
+          <p className="mt-4 md:mt-6 mx-auto text-[hsl(0_0%_0%_/_0.6)] text-[clamp(0.875rem,1.6vw,2.375rem)] tracking-tight">
+            Seeking knowledge made easy.
           </p>
 
-          <div className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
+          <ul className="mt-3 md:mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[hsl(0_0%_0%_/_0.55)] text-xs sm:text-sm md:text-base">
+            {GUARANTEES.map((g) => (
+              <li key={g}>{g}</li>
+            ))}
+          </ul>
+
+          <div className="mt-7 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
             <a
               href="#products"
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand text-brand-foreground font-semibold tracking-tight text-base md:text-lg px-7 md:px-9 py-3.5 md:py-4 shadow-lg shadow-brand/20 hover:shadow-xl hover:-translate-y-0.5 transition-all"
@@ -181,54 +186,19 @@ const IndexV2 = () => {
               Check out categories
             </a>
           </div>
-
-          <ul className="mt-10 md:mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-foreground/70 text-xs sm:text-sm md:text-base">
-            {GUARANTEES.map(({ label, icon: Icon }) => (
-              <li key={label} className="flex items-center gap-1.5">
-                <Icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-hero-foreground" />
-                {label}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
-      {/* Categories strip */}
-      <section id="categories" className="bg-background border-b border-border">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-10 md:py-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-            {["Quran & Tafsir", "Hadith", "Fiqh", "Clothing"].map((cat) => (
-              <a
-                key={cat}
-                href="#"
-                className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-placeholder hover:shadow-lg transition-shadow"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
-                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-background">
-                  <span className="font-semibold text-sm md:text-lg">{cat}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured */}
-      <section id="products" className="bg-background pb-16 md:pb-24">
+      {/* Featured Products (first) */}
+      <section id="products" className="bg-hero pb-12 md:pb-20">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 pt-12 md:pt-16">
           <div className="flex items-end justify-between mb-6 md:mb-10">
-            <div>
-              <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-foreground/50 mb-2">
-                Handpicked
-              </p>
-              <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl font-semibold">
-                Featured Products
-              </h2>
-            </div>
+            <h2 className="text-foreground tracking-tight text-xl md:text-3xl lg:text-4xl">
+              Featured Products
+            </h2>
             <a
               href="#"
-              className="group inline-flex items-center gap-1 text-foreground/80 text-sm md:text-base hover:text-brand transition-colors"
+              className="group inline-flex items-center gap-1 text-foreground text-xs md:text-base hover:text-brand transition-colors"
             >
               View all
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -242,11 +212,11 @@ const IndexV2 = () => {
                 className="group cursor-pointer"
                 aria-label={`Featured product ${i + 1}`}
               >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-placeholder">
+                <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-placeholder shadow-sm group-hover:shadow-lg transition-shadow">
                   <button
                     type="button"
                     aria-label="Add to wishlist"
-                    className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-background/90 text-foreground hover:bg-background transition-colors opacity-0 group-hover:opacity-100"
+                    className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-background/90 text-foreground hover:bg-background transition-all opacity-0 group-hover:opacity-100"
                   >
                     <Heart className="h-4 w-4" />
                   </button>
@@ -261,6 +231,32 @@ const IndexV2 = () => {
                   </p>
                 </div>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories — Books, Clothes, Essentials */}
+      <section id="categories" className="bg-background border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-12 md:py-16">
+          <div className="flex items-end justify-between mb-6 md:mb-10">
+            <h2 className="text-foreground tracking-tight text-xl md:text-3xl lg:text-4xl">
+              Shop by category
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+            {CATEGORIES.map((cat) => (
+              <a
+                key={cat}
+                href="#"
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-placeholder hover:shadow-lg transition-shadow"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
+                <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between text-background">
+                  <span className="font-semibold text-base md:text-xl">{cat}</span>
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </a>
             ))}
           </div>
         </div>
