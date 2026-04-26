@@ -204,14 +204,14 @@ const Index = () => {
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
-          style={{ top: "-6vw", left: "-11.04vw", width: "29.04vw", height: "auto" }}
+          style={{ top: "-10vw", left: "-11.04vw", width: "29.04vw", height: "auto" }}
         />
         <img
           src={calligraphyRight}
           alt=""
           aria-hidden
           className="pointer-events-none select-none absolute opacity-90"
-          style={{ top: "-6vw", right: "-14vw", width: "28.84vw", height: "auto" }}
+          style={{ top: "-10vw", right: "-11vw", width: "28.84vw", height: "auto" }}
         />
 
         {/* Soft glow behind text */}
