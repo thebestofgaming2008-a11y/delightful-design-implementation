@@ -136,7 +136,7 @@ const Index = () => {
 
         {/* Nav with active underline flush to header bottom */}
         <nav className="mx-auto max-w-[1440px] px-4 md:px-8">
-          <ul className="flex items-center justify-center gap-6 sm:gap-10 md:gap-16 text-sm md:text-base overflow-x-auto">
+          <ul className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-16 text-sm md:text-base">
             {NAV_LINKS.map((link, i) => {
               const active = i === 0;
               return (
