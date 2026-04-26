@@ -2,7 +2,6 @@ import {
   ArrowRight,
   ChevronDown,
   Heart,
-  Mail,
   Menu,
   Search,
   ShoppingBag,
@@ -12,6 +11,13 @@ import {
   RotateCcw,
   Headphones,
   X,
+  Instagram,
+  BookOpen,
+  Scroll,
+  Feather,
+  Quote,
+  Languages,
+  Scale,
 } from "lucide-react";
 import { useState } from "react";
 import calligraphyLeft from "@/assets/calligraphy-left.png";
@@ -21,10 +27,54 @@ import logo from "@/assets/logo-header.png";
 const NAV_LINKS = ["All products", "Books", "Clothing", "Track order"];
 const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
 
-const CATEGORIES = [
-  { name: "Books", desc: "Aqeedah, Seerah, Tafsir & more" },
-  { name: "Clothing", desc: "Modest, comfortable, refined" },
-  { name: "Essentials", desc: "Daily companions for the seeker" },
+const CATEGORY_TABS = [
+  {
+    key: "books",
+    label: "Books",
+    blurb: "Authentic titles across Aqeedah, Seerah, Tafsir & more.",
+    products: [
+      { title: "The Book of Monotheism", author: "Sh. Muhammad ibn Abdul Wahhab", price: 499 },
+      { title: "Riyad as-Salihin", author: "Imam An-Nawawi", price: 899 },
+      { title: "Fortress of the Muslim", author: "Sa'id ibn Ali al-Qahtani", price: 249 },
+      { title: "Stories of the Prophets", author: "Ibn Kathir", price: 749 },
+      { title: "The Sealed Nectar", author: "Safi-ur-Rahman al-Mubarakpuri", price: 699 },
+    ],
+  },
+  {
+    key: "clothes",
+    label: "Clothes",
+    blurb: "Modest, comfortable and refined everyday essentials.",
+    products: [
+      { title: "Classic Black Thobe", author: "Hurayrah Essentials", price: 1499 },
+      { title: "Cotton Prayer Cap", author: "Hurayrah Essentials", price: 199 },
+      { title: "Olive Linen Kufi", author: "Hurayrah Essentials", price: 299 },
+      { title: "White Cotton Thobe", author: "Hurayrah Essentials", price: 1399 },
+      { title: "Imamah Wrap — Cream", author: "Hurayrah Essentials", price: 449 },
+    ],
+  },
+  {
+    key: "essentials",
+    label: "Essentials",
+    blurb: "Daily companions for the seeker of knowledge.",
+    products: [
+      { title: "Wooden Misbaha (99)", author: "Hurayrah Essentials", price: 349 },
+      { title: "Travel Prayer Mat", author: "Hurayrah Essentials", price: 599 },
+      { title: "Attar — Oud Mubarak", author: "Hurayrah Essentials", price: 449 },
+      { title: "Miswak Bundle (5)", author: "Hurayrah Essentials", price: 149 },
+      { title: "Leather Qur'an Cover", author: "Hurayrah Essentials", price: 799 },
+    ],
+  },
+] as const;
+
+const SUBJECTS = [
+  { name: "Aqeedah", desc: "Creed & belief", Icon: Shield },
+  { name: "Seerah", desc: "The Prophet's life ﷺ", Icon: Scroll },
+  { name: "Tafsir", desc: "Qur'anic exegesis", Icon: BookOpen },
+  { name: "Hadith", desc: "Prophetic traditions", Icon: Quote },
+  { name: "Fiqh", desc: "Islamic jurisprudence", Icon: Scale },
+  { name: "Arabic", desc: "Language of the Qur'an", Icon: Languages },
+  { name: "Tazkiyah", desc: "Purification of the soul", Icon: Feather },
+  { name: "Children", desc: "For young seekers", Icon: Heart },
 ];
 
 const FEATURED = [
@@ -35,10 +85,10 @@ const FEATURED = [
 ];
 
 const VALUE_PROPS = [
-  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries." },
-  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments, every order." },
-  { Icon: RotateCcw, title: "Easy returns", desc: "7-day hassle-free returns." },
-  { Icon: Headphones, title: "Real support", desc: "Friendly help, when you need it." },
+  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries, tracked end-to-end." },
+  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments — every order, every time." },
+  { Icon: RotateCcw, title: "Easy returns", desc: "Seven-day, hassle-free returns on every item." },
+  { Icon: Headphones, title: "Real support", desc: "Friendly humans, ready to help when you need it." },
 ];
 
 const TESTIMONIALS = [
@@ -64,6 +114,8 @@ const TESTIMONIALS = [
 
 const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeCat, setActiveCat] = useState<(typeof CATEGORY_TABS)[number]["key"]>("books");
+  const activeCategory = CATEGORY_TABS.find((c) => c.key === activeCat)!;
 
   return (
     <main className="min-h-screen bg-background">
@@ -305,37 +357,119 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Categories — Books, Clothing, Essentials */}
+      {/* Shop by category — tabs + horizontal product rail */}
       <section id="categories" className="bg-background border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
-          <div className="flex items-end justify-between mb-6 md:mb-10">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 md:mb-8">
             <div>
               <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
                 Shop by category
               </h2>
               <p className="mt-2 text-foreground/60 text-sm md:text-base">
-                Three collections, one purpose.
+                {activeCategory.blurb}
               </p>
+            </div>
+
+            {/* Segmented control */}
+            <div
+              role="tablist"
+              aria-label="Product categories"
+              className="inline-flex self-start md:self-auto rounded-full border border-border bg-hero/40 p-1"
+            >
+              {CATEGORY_TABS.map((cat) => {
+                const active = cat.key === activeCat;
+                return (
+                  <button
+                    key={cat.key}
+                    role="tab"
+                    aria-selected={active}
+                    type="button"
+                    onClick={() => setActiveCat(cat.key)}
+                    className={`px-4 md:px-5 py-2 rounded-full text-sm md:text-base font-medium transition-all ${
+                      active
+                        ? "bg-brand text-brand-foreground shadow-sm"
+                        : "text-foreground/70 hover:text-foreground"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-            {CATEGORIES.map((cat) => (
+          {/* Horizontal product rail */}
+          <div className="-mx-4 md:-mx-8 px-4 md:px-8 overflow-x-auto pb-3 [scrollbar-width:thin]">
+            <div className="flex gap-4 md:gap-6 min-w-max">
+              {activeCategory.products.map((p, i) => (
+                <article
+                  key={`${activeCategory.key}-${i}`}
+                  className="group cursor-pointer w-[160px] sm:w-[200px] md:w-[240px] shrink-0"
+                >
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-placeholder shadow-sm group-hover:shadow-lg transition-shadow">
+                    <button
+                      type="button"
+                      aria-label="Add to wishlist"
+                      className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-background/90 text-foreground hover:bg-background transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <Heart className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="mt-3">
+                    <h3 className="text-sm md:text-base text-foreground font-medium line-clamp-1">
+                      {p.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-foreground/60 line-clamp-1">
+                      {p.author}
+                    </p>
+                    <p className="mt-1 text-sm md:text-base text-hero-foreground font-semibold">
+                      ₹{p.price.toLocaleString()}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href="#"
+              className="group inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground font-semibold text-sm md:text-base px-6 md:px-8 py-3 hover:opacity-95 transition-opacity"
+            >
+              Shop all {activeCategory.label.toLowerCase()}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Choose subjects */}
+      <section id="subjects" className="bg-hero/40 border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
+            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+              Choose your subject
+            </h2>
+            <p className="mt-2 text-foreground/60 text-sm md:text-base">
+              Start where your heart is drawn — explore titles by field of study.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {SUBJECTS.map(({ name, desc, Icon }) => (
               <a
-                key={cat.name}
+                key={name}
                 href="#"
-                className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-placeholder hover:shadow-xl transition-all"
+                className="group flex items-center gap-3 md:gap-4 rounded-xl border border-border bg-background p-4 md:p-5 hover:border-brand hover:shadow-md transition-all"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-brand/80 via-brand/20 to-transparent" />
-                <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-end text-brand-foreground">
-                  <h3 className="font-bold italic text-xl md:text-2xl">{cat.name}</h3>
-                  <p className="text-xs md:text-sm text-brand-foreground/80 mt-1">
-                    {cat.desc}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold">
-                    Explore
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </span>
+                <span className="h-11 w-11 md:h-12 md:w-12 shrink-0 grid place-items-center rounded-lg bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-foreground text-sm md:text-base truncate">
+                    {name}
+                  </h3>
+                  <p className="text-xs text-foreground/55 truncate">{desc}</p>
                 </div>
               </a>
             ))}
@@ -343,32 +477,54 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Value props */}
-      <section className="bg-hero/40 border-y border-border">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-10 md:py-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+      {/* Guarantees — redesigned */}
+      <section className="bg-background border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
+            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">
+              Our promise
+            </p>
+            <h2 className="mt-2 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+              Shop with complete peace of mind
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {VALUE_PROPS.map(({ Icon, title, desc }) => (
-              <div key={title} className="flex flex-col items-start gap-2">
-                <span className="h-10 w-10 grid place-items-center rounded-full bg-brand text-brand-foreground">
+              <div
+                key={title}
+                className="group relative overflow-hidden rounded-2xl border border-border bg-hero/30 p-6 md:p-7 hover:border-brand/40 hover:shadow-lg transition-all"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-sm">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="font-semibold text-foreground text-sm md:text-base">{title}</h3>
-                <p className="text-xs md:text-sm text-foreground/60">{desc}</p>
+                <h3 className="mt-4 font-semibold text-foreground text-base md:text-lg">
+                  {title}
+                </h3>
+                <p className="mt-1.5 text-sm text-foreground/60 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="bg-background">
+      {/* Reviews — redesigned with Instagram CTA */}
+      <section className="bg-hero/40 border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+          <div className="text-center mb-10 md:mb-14 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full bg-background border border-border px-3 py-1 text-xs font-medium text-foreground/70">
+              <span className="flex gap-0.5 text-hero-foreground">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" />
+                ))}
+              </span>
+              4.9 average from 1,200+ readers
+            </div>
+            <h2 className="mt-4 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
               Loved by readers worldwide
             </h2>
             <p className="mt-2 text-foreground/60 text-sm md:text-base">
-              Honest words from our growing community.
+              Honest words from our growing community of seekers.
             </p>
           </div>
 
@@ -376,8 +532,12 @@ const Index = () => {
             {TESTIMONIALS.map((t) => (
               <figure
                 key={t.name}
-                className="rounded-2xl border border-border bg-hero/30 p-6 md:p-7 flex flex-col gap-4"
+                className="relative rounded-2xl border border-border bg-background p-6 md:p-7 flex flex-col gap-4 hover:shadow-lg transition-shadow"
               >
+                <Quote
+                  className="absolute top-5 right-5 h-8 w-8 text-brand/15"
+                  aria-hidden
+                />
                 <div className="flex gap-0.5 text-hero-foreground" aria-label="5 star rating">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-current" />
@@ -386,48 +546,31 @@ const Index = () => {
                 <blockquote className="text-foreground/85 text-sm md:text-base leading-relaxed">
                   “{t.quote}”
                 </blockquote>
-                <figcaption className="mt-auto">
-                  <p className="font-semibold text-foreground text-sm">{t.name}</p>
-                  <p className="text-xs text-foreground/55">{t.role}</p>
+                <figcaption className="mt-auto flex items-center gap-3">
+                  <span className="h-10 w-10 rounded-full bg-brand/10 text-brand grid place-items-center font-semibold">
+                    {t.name.charAt(0)}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">{t.name}</p>
+                    <p className="text-xs text-foreground/55">{t.role}</p>
+                  </div>
                 </figcaption>
               </figure>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Newsletter */}
-      <section className="bg-brand text-brand-foreground">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-12 md:py-16 grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="font-bold italic tracking-tight text-2xl md:text-3xl lg:text-4xl">
-              Join the Hurayrah newsletter
-            </h2>
-            <p className="mt-2 text-brand-foreground/70 text-sm md:text-base">
-              New arrivals, restocks and reader-only offers — straight to your inbox.
-            </p>
-          </div>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex flex-col sm:flex-row items-stretch gap-2"
-          >
-            <label className="flex flex-1 items-center gap-2 rounded-md bg-brand-foreground/10 border border-brand-foreground/20 px-3 py-3">
-              <Mail className="h-4 w-4 text-brand-foreground/70" />
-              <input
-                type="email"
-                required
-                placeholder="you@example.com"
-                aria-label="Email address"
-                className="bg-transparent flex-1 text-sm outline-none placeholder:text-brand-foreground/50 text-brand-foreground"
-              />
-            </label>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center rounded-md bg-brand-foreground text-brand font-semibold text-sm px-6 py-3 hover:opacity-90 transition-opacity"
+          <div className="mt-10 md:mt-14 flex justify-center">
+            <a
+              href="https://instagram.com/hurayrahessentials"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 rounded-full bg-foreground text-background px-6 md:px-7 py-3 md:py-3.5 font-semibold text-sm md:text-base shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
             >
-              Subscribe
-            </button>
-          </form>
+              <Instagram className="h-5 w-5" />
+              See all reviews on Instagram
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+          </div>
         </div>
       </section>
 
