@@ -2,7 +2,6 @@ import {
   ArrowRight,
   ChevronDown,
   Heart,
-  Mail,
   Menu,
   Search,
   ShoppingBag,
@@ -12,6 +11,13 @@ import {
   RotateCcw,
   Headphones,
   X,
+  Instagram,
+  BookOpen,
+  Scroll,
+  Feather,
+  Quote,
+  Languages,
+  Scale,
 } from "lucide-react";
 import { useState } from "react";
 import calligraphyLeft from "@/assets/calligraphy-left.png";
@@ -21,10 +27,54 @@ import logo from "@/assets/logo-header.png";
 const NAV_LINKS = ["All products", "Books", "Clothing", "Track order"];
 const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
 
-const CATEGORIES = [
-  { name: "Books", desc: "Aqeedah, Seerah, Tafsir & more" },
-  { name: "Clothing", desc: "Modest, comfortable, refined" },
-  { name: "Essentials", desc: "Daily companions for the seeker" },
+const CATEGORY_TABS = [
+  {
+    key: "books",
+    label: "Books",
+    blurb: "Authentic titles across Aqeedah, Seerah, Tafsir & more.",
+    products: [
+      { title: "The Book of Monotheism", author: "Sh. Muhammad ibn Abdul Wahhab", price: 499 },
+      { title: "Riyad as-Salihin", author: "Imam An-Nawawi", price: 899 },
+      { title: "Fortress of the Muslim", author: "Sa'id ibn Ali al-Qahtani", price: 249 },
+      { title: "Stories of the Prophets", author: "Ibn Kathir", price: 749 },
+      { title: "The Sealed Nectar", author: "Safi-ur-Rahman al-Mubarakpuri", price: 699 },
+    ],
+  },
+  {
+    key: "clothes",
+    label: "Clothes",
+    blurb: "Modest, comfortable and refined everyday essentials.",
+    products: [
+      { title: "Classic Black Thobe", author: "Hurayrah Essentials", price: 1499 },
+      { title: "Cotton Prayer Cap", author: "Hurayrah Essentials", price: 199 },
+      { title: "Olive Linen Kufi", author: "Hurayrah Essentials", price: 299 },
+      { title: "White Cotton Thobe", author: "Hurayrah Essentials", price: 1399 },
+      { title: "Imamah Wrap — Cream", author: "Hurayrah Essentials", price: 449 },
+    ],
+  },
+  {
+    key: "essentials",
+    label: "Essentials",
+    blurb: "Daily companions for the seeker of knowledge.",
+    products: [
+      { title: "Wooden Misbaha (99)", author: "Hurayrah Essentials", price: 349 },
+      { title: "Travel Prayer Mat", author: "Hurayrah Essentials", price: 599 },
+      { title: "Attar — Oud Mubarak", author: "Hurayrah Essentials", price: 449 },
+      { title: "Miswak Bundle (5)", author: "Hurayrah Essentials", price: 149 },
+      { title: "Leather Qur'an Cover", author: "Hurayrah Essentials", price: 799 },
+    ],
+  },
+] as const;
+
+const SUBJECTS = [
+  { name: "Aqeedah", desc: "Creed & belief", Icon: Shield },
+  { name: "Seerah", desc: "The Prophet's life ﷺ", Icon: Scroll },
+  { name: "Tafsir", desc: "Qur'anic exegesis", Icon: BookOpen },
+  { name: "Hadith", desc: "Prophetic traditions", Icon: Quote },
+  { name: "Fiqh", desc: "Islamic jurisprudence", Icon: Scale },
+  { name: "Arabic", desc: "Language of the Qur'an", Icon: Languages },
+  { name: "Tazkiyah", desc: "Purification of the soul", Icon: Feather },
+  { name: "Children", desc: "For young seekers", Icon: Heart },
 ];
 
 const FEATURED = [
@@ -35,10 +85,10 @@ const FEATURED = [
 ];
 
 const VALUE_PROPS = [
-  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries." },
-  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments, every order." },
-  { Icon: RotateCcw, title: "Easy returns", desc: "7-day hassle-free returns." },
-  { Icon: Headphones, title: "Real support", desc: "Friendly help, when you need it." },
+  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries, tracked end-to-end." },
+  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments — every order, every time." },
+  { Icon: RotateCcw, title: "Easy returns", desc: "Seven-day, hassle-free returns on every item." },
+  { Icon: Headphones, title: "Real support", desc: "Friendly humans, ready to help when you need it." },
 ];
 
 const TESTIMONIALS = [
@@ -64,6 +114,8 @@ const TESTIMONIALS = [
 
 const Index = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeCat, setActiveCat] = useState<(typeof CATEGORY_TABS)[number]["key"]>("books");
+  const activeCategory = CATEGORY_TABS.find((c) => c.key === activeCat)!;
 
   return (
     <main className="min-h-screen bg-background">
