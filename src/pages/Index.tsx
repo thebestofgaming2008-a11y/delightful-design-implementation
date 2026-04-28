@@ -1,16 +1,10 @@
 import {
   ArrowRight,
-  ChevronDown,
-  Heart,
-  Menu,
-  Search,
-  ShoppingBag,
   Star,
   Truck,
   Shield,
   RotateCcw,
   Headphones,
-  X,
   Instagram,
   BookOpen,
   Scroll,
@@ -18,53 +12,17 @@ import {
   Quote,
   Languages,
   Scale,
+  Heart,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import calligraphyLeft from "@/assets/calligraphy-left.png";
 import calligraphyRight from "@/assets/calligraphy-right.png";
-import logo from "@/assets/logo-header.png";
+import { SiteLayout } from "@/components/layout/SiteLayout";
+import { ProductCard } from "@/components/shop/ProductCard";
+import { CATEGORIES, PRODUCTS, productsByCategory, type CategoryKey } from "@/data/products";
 
-const NAV_LINKS = ["All products", "Books", "Clothing", "Track order"];
 const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
-
-const CATEGORY_TABS = [
-  {
-    key: "books",
-    label: "Books",
-    blurb: "Authentic titles across Aqeedah, Seerah, Tafsir & more.",
-    products: [
-      { title: "The Book of Monotheism", author: "Sh. Muhammad ibn Abdul Wahhab", price: 499 },
-      { title: "Riyad as-Salihin", author: "Imam An-Nawawi", price: 899 },
-      { title: "Fortress of the Muslim", author: "Sa'id ibn Ali al-Qahtani", price: 249 },
-      { title: "Stories of the Prophets", author: "Ibn Kathir", price: 749 },
-      { title: "The Sealed Nectar", author: "Safi-ur-Rahman al-Mubarakpuri", price: 699 },
-    ],
-  },
-  {
-    key: "clothes",
-    label: "Clothes",
-    blurb: "Modest, comfortable and refined everyday essentials.",
-    products: [
-      { title: "Classic Black Thobe", author: "Hurayrah Essentials", price: 1499 },
-      { title: "Cotton Prayer Cap", author: "Hurayrah Essentials", price: 199 },
-      { title: "Olive Linen Kufi", author: "Hurayrah Essentials", price: 299 },
-      { title: "White Cotton Thobe", author: "Hurayrah Essentials", price: 1399 },
-      { title: "Imamah Wrap — Cream", author: "Hurayrah Essentials", price: 449 },
-    ],
-  },
-  {
-    key: "essentials",
-    label: "Essentials",
-    blurb: "Daily companions for the seeker of knowledge.",
-    products: [
-      { title: "Wooden Misbaha (99)", author: "Hurayrah Essentials", price: 349 },
-      { title: "Travel Prayer Mat", author: "Hurayrah Essentials", price: 599 },
-      { title: "Attar — Oud Mubarak", author: "Hurayrah Essentials", price: 449 },
-      { title: "Miswak Bundle (5)", author: "Hurayrah Essentials", price: 149 },
-      { title: "Leather Qur'an Cover", author: "Hurayrah Essentials", price: 799 },
-    ],
-  },
-] as const;
 
 const SUBJECTS = [
   { name: "Aqeedah", desc: "Creed & belief", Icon: Shield },
@@ -77,13 +35,6 @@ const SUBJECTS = [
   { name: "Children", desc: "For young seekers", Icon: Heart },
 ];
 
-const FEATURED = [
-  { title: "The Book of Monotheism", author: "Sh. Muhammad ibn Abdul Wahhab", price: 499 },
-  { title: "Riyad as-Salihin", author: "Imam An-Nawawi", price: 899 },
-  { title: "Fortress of the Muslim", author: "Sa'id ibn Ali al-Qahtani", price: 249 },
-  { title: "Stories of the Prophets", author: "Ibn Kathir", price: 749 },
-];
-
 const VALUE_PROPS = [
   { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries, tracked end-to-end." },
   { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments — every order, every time." },
@@ -92,163 +43,24 @@ const VALUE_PROPS = [
 ];
 
 const TESTIMONIALS = [
-  {
-    quote:
-      "Beautifully curated collection. The shipping was faster than I expected and the books arrived in perfect condition.",
-    name: "Amina S.",
-    role: "Verified buyer",
-  },
-  {
-    quote:
-      "Authentic titles at honest prices. Hurayrah Essentials has become my go-to for building my library.",
-    name: "Yusuf R.",
-    role: "Verified buyer",
-  },
-  {
-    quote:
-      "Quality of the clothing is excellent. Modest, comfortable and well-priced — exactly what I was looking for.",
-    name: "Khadija M.",
-    role: "Verified buyer",
-  },
+  { quote: "Beautifully curated collection. The shipping was faster than I expected and the books arrived in perfect condition.", name: "Amina S.", role: "Verified buyer" },
+  { quote: "Authentic titles at honest prices. Hurayrah Essentials has become my go-to for building my library.", name: "Yusuf R.", role: "Verified buyer" },
+  { quote: "Quality of the clothing is excellent. Modest, comfortable and well-priced — exactly what I was looking for.", name: "Khadija M.", role: "Verified buyer" },
 ];
 
+const TAB_KEYS: CategoryKey[] = ["books", "clothes", "essentials"];
+
 const Index = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeCat, setActiveCat] = useState<(typeof CATEGORY_TABS)[number]["key"]>("books");
-  const activeCategory = CATEGORY_TABS.find((c) => c.key === activeCat)!;
+  const [activeCat, setActiveCat] = useState<CategoryKey>("books");
+  const activeMeta = CATEGORIES.find((c) => c.key === activeCat)!;
+  const activeProducts = productsByCategory(activeCat);
+
+  const featured = PRODUCTS.slice(0, 4);
+  const kufi = productsByCategory("kufi");
+  const women = productsByCategory("women");
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Top notice bar — dark navy */}
-      <div className="bg-brand text-brand-foreground relative z-30">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-2 px-4 py-2 text-[11px] sm:text-xs md:text-sm">
-          <span className="hidden sm:block w-[80px]" aria-hidden />
-          <p className="flex-1 text-center">
-            International orders may incur customs/import duties
-          </p>
-          <button
-            type="button"
-            className="flex items-center gap-1 rounded-sm px-2 py-0.5 hover:bg-white/10 transition-colors"
-            aria-label="Select currency"
-          >
-            <ChevronDown className="h-3 w-3" />
-            <span className="font-medium">INR</span>
-            <span>₹</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Header */}
-      <header className="relative z-20 bg-hero border-b border-[hsl(0_0%_0%_/_0.17)]">
-        <div className="mx-auto max-w-[1440px] grid grid-cols-[auto_1fr_auto] items-center gap-3 md:gap-6 px-4 py-3 md:px-8 md:py-4">
-          {/* Hamburger left (per Figma) */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground hover:bg-foreground/5 transition-colors"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-
-          {/* Centered logo */}
-          <a href="/" className="flex justify-center" aria-label="Hurayrah Essentials home">
-            <img
-              src={logo}
-              alt="Hurayrah Essentials"
-              className="h-12 md:h-14 w-auto object-contain"
-            />
-          </a>
-
-          {/* Cart right */}
-          <button
-            type="button"
-            aria-label="Cart"
-            className="relative inline-flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
-          >
-            <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
-            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] px-1 grid place-items-center rounded-full bg-brand text-brand-foreground text-[10px] font-semibold">
-              0
-            </span>
-          </button>
-        </div>
-
-        {/* Search bar — matches Figma rounded outlined input */}
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 pb-3 md:pb-4">
-          <label className="mx-auto flex items-center gap-2 rounded-xl bg-header-surface border-2 border-[hsl(220_18%_85%)] px-3 py-2.5 md:py-3 max-w-[640px] focus-within:border-brand transition-colors">
-            <Search className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
-            <input
-              type="search"
-              placeholder="the book of monotheism..."
-              className="bg-transparent flex-1 text-sm md:text-base outline-none placeholder:text-[hsl(225_8%_45%)]"
-              aria-label="Search products"
-            />
-          </label>
-        </div>
-
-        {/* Nav with active underline flush to header bottom */}
-        <nav className="mx-auto max-w-[1440px] px-4 md:px-8">
-          <ul className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 md:gap-16 text-sm md:text-base">
-            {NAV_LINKS.map((link, i) => {
-              const active = i === 0;
-              return (
-                <li key={link} className="shrink-0">
-                  <a
-                    href="#"
-                    className={`relative inline-block py-2.5 transition-colors ${
-                      active
-                        ? "text-hero-foreground font-semibold"
-                        : "text-foreground/80 hover:text-brand"
-                    }`}
-                  >
-                    {link}
-                    {active && (
-                      <span className="absolute -bottom-[1px] left-0 h-[2px] w-full bg-hero-foreground rounded-full" />
-                    )}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </header>
-
-      {/* Mobile menu drawer */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
-        >
-          <aside
-            className="absolute left-0 top-0 h-full w-[80%] max-w-[320px] bg-background shadow-xl p-5 flex flex-col gap-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-bold italic text-lg">Menu</span>
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-                className="h-9 w-9 grid place-items-center rounded-md hover:bg-foreground/5"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <nav className="flex flex-col">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="py-3 border-b border-border text-base text-foreground hover:text-brand transition-colors"
-                >
-                  {link}
-                </a>
-              ))}
-            </nav>
-          </aside>
-        </div>
-      )}
-
+    <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero">
         <img
@@ -266,7 +78,6 @@ const Index = () => {
           style={{ top: "-10vw", right: "-11vw", width: "28.84vw", height: "auto" }}
         />
 
-        {/* Soft glow behind text */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
@@ -295,16 +106,16 @@ const Index = () => {
           </ul>
 
           <div className="mt-7 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
-            <a
-              href="#products"
+            <Link
+              to="/shop"
               className="group inline-flex items-center justify-center gap-2 rounded-md bg-brand text-brand-foreground font-bold tracking-tight text-base md:text-lg px-10 md:px-14 py-3.5 md:py-4 shadow-2xl hover:opacity-95 transition-opacity"
             >
               Browse products
               <ArrowRight className="h-4 w-4 md:h-5 md:w-5 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </Link>
             <a
               href="#categories"
-              className="inline-flex items-center justify-center rounded-2xl text-hero-foreground font-bold tracking-tight text-base md:text-lg px-10 md:px-14 py-3.5 md:py-4 hover:bg-white/40 transition-colors shadow-inner"
+              className="glass-cta inline-flex items-center justify-center rounded-2xl text-hero-foreground font-bold tracking-tight text-base md:text-lg px-10 md:px-14 py-3.5 md:py-4 transition-all"
             >
               Check out categories
             </a>
@@ -319,176 +130,133 @@ const Index = () => {
             <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
               Featured Products
             </h2>
-            <a
-              href="#"
-              className="group inline-flex items-center gap-1 text-foreground text-sm md:text-base hover:text-brand transition-colors"
-            >
+            <Link to="/shop" className="group inline-flex items-center gap-1 text-foreground text-sm md:text-base hover:text-brand transition-colors">
               View all
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </Link>
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {FEATURED.map((p, i) => (
-              <article key={i} className="group cursor-pointer">
-                <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-placeholder shadow-sm group-hover:shadow-lg transition-shadow">
-                  <button
-                    type="button"
-                    aria-label="Add to wishlist"
-                    className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-background/90 text-foreground hover:bg-background transition-all opacity-0 group-hover:opacity-100"
-                  >
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-                <div className="mt-3">
-                  <h3 className="text-sm md:text-base text-foreground font-medium line-clamp-1">
-                    {p.title}
-                  </h3>
-                  <p className="text-xs md:text-sm text-foreground/60 line-clamp-1">
-                    {p.author}
-                  </p>
-                  <p className="mt-1 text-sm md:text-base text-hero-foreground font-semibold">
-                    ₹{p.price.toLocaleString()}
-                  </p>
-                </div>
-              </article>
+            {featured.map((p) => (
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Shop by category — tabs + horizontal product rail */}
+      {/* Shop by category — tabs */}
       <section id="categories" className="bg-background border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 md:mb-8">
             <div>
-              <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
-                Shop by category
-              </h2>
-              <p className="mt-2 text-foreground/60 text-sm md:text-base">
-                {activeCategory.blurb}
-              </p>
+              <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">Shop by category</h2>
+              <p className="mt-2 text-foreground/60 text-sm md:text-base">{activeMeta.blurb}</p>
             </div>
-
-            {/* Segmented control */}
             <div
               role="tablist"
               aria-label="Product categories"
               className="inline-flex self-start md:self-auto rounded-full border border-border bg-hero/40 p-1"
             >
-              {CATEGORY_TABS.map((cat) => {
-                const active = cat.key === activeCat;
+              {TAB_KEYS.map((key) => {
+                const meta = CATEGORIES.find((c) => c.key === key)!;
+                const active = key === activeCat;
                 return (
                   <button
-                    key={cat.key}
+                    key={key}
                     role="tab"
                     aria-selected={active}
                     type="button"
-                    onClick={() => setActiveCat(cat.key)}
+                    onClick={() => setActiveCat(key)}
                     className={`px-4 md:px-5 py-2 rounded-full text-sm md:text-base font-medium transition-all ${
-                      active
-                        ? "bg-brand text-brand-foreground shadow-sm"
-                        : "text-foreground/70 hover:text-foreground"
+                      active ? "bg-brand text-brand-foreground shadow-sm" : "text-foreground/70 hover:text-foreground"
                     }`}
                   >
-                    {cat.label}
+                    {meta.label}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Horizontal product rail */}
           <div className="-mx-4 md:-mx-8 px-4 md:px-8 overflow-x-auto pb-3 [scrollbar-width:thin]">
             <div className="flex gap-4 md:gap-6 min-w-max">
-              {activeCategory.products.map((p, i) => (
-                <article
-                  key={`${activeCategory.key}-${i}`}
-                  className="group cursor-pointer w-[160px] sm:w-[200px] md:w-[240px] shrink-0"
-                >
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-placeholder shadow-sm group-hover:shadow-lg transition-shadow">
-                    <button
-                      type="button"
-                      aria-label="Add to wishlist"
-                      className="absolute top-3 right-3 h-9 w-9 grid place-items-center rounded-full bg-background/90 text-foreground hover:bg-background transition-all opacity-0 group-hover:opacity-100"
-                    >
-                      <Heart className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <div className="mt-3">
-                    <h3 className="text-sm md:text-base text-foreground font-medium line-clamp-1">
-                      {p.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-foreground/60 line-clamp-1">
-                      {p.author}
-                    </p>
-                    <p className="mt-1 text-sm md:text-base text-hero-foreground font-semibold">
-                      ₹{p.price.toLocaleString()}
-                    </p>
-                  </div>
-                </article>
+              {activeProducts.map((p) => (
+                <ProductCard key={p.id} product={p} className="w-[160px] sm:w-[200px] md:w-[240px] shrink-0" />
               ))}
             </div>
           </div>
 
           <div className="mt-8 flex justify-center">
-            <a
-              href="#"
+            <Link
+              to={`/category/${activeCat}`}
               className="group inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground font-semibold text-sm md:text-base px-6 md:px-8 py-3 hover:opacity-95 transition-opacity"
             >
-              Shop all {activeCategory.label.toLowerCase()}
+              Shop all {activeMeta.label.toLowerCase()}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Choose subjects */}
+      {/* Kufi collection */}
+      <CollectionSection
+        eyebrow="Crafted with care"
+        title="The Kufi Collection"
+        blurb="Refined caps in linen, cotton and crochet — finishing touches for the everyday."
+        products={kufi}
+        ctaTo="/category/kufi"
+        ctaLabel="Shop all kufi"
+        bgClass="bg-hero/40"
+      />
+
+      {/* Women collection */}
+      <CollectionSection
+        eyebrow="For her"
+        title="Women's Essentials"
+        blurb="Modest abayas, hijabs and prayer sets in calm, considered fabrics."
+        products={women}
+        ctaTo="/category/women"
+        ctaLabel="Shop women"
+        bgClass="bg-background"
+      />
+
+      {/* Subjects */}
       <section id="subjects" className="bg-hero/40 border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
           <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
-            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
-              Choose your subject
-            </h2>
+            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">Choose your subject</h2>
             <p className="mt-2 text-foreground/60 text-sm md:text-base">
               Start where your heart is drawn — explore titles by field of study.
             </p>
           </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {SUBJECTS.map(({ name, desc, Icon }) => (
-              <a
+              <Link
                 key={name}
-                href="#"
+                to={`/shop?subject=${encodeURIComponent(name)}`}
                 className="group flex items-center gap-3 md:gap-4 rounded-xl border border-border bg-background p-4 md:p-5 hover:border-brand hover:shadow-md transition-all"
               >
                 <span className="h-11 w-11 md:h-12 md:w-12 shrink-0 grid place-items-center rounded-lg bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
                   <Icon className="h-5 w-5" />
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-foreground text-sm md:text-base truncate">
-                    {name}
-                  </h3>
+                  <h3 className="font-semibold text-foreground text-sm md:text-base truncate">{name}</h3>
                   <p className="text-xs text-foreground/55 truncate">{desc}</p>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Guarantees — redesigned */}
+      {/* Guarantees */}
       <section className="bg-background border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
           <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
-            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">
-              Our promise
-            </p>
+            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">Our promise</p>
             <h2 className="mt-2 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
               Shop with complete peace of mind
             </h2>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {VALUE_PROPS.map(({ Icon, title, desc }) => (
               <div
@@ -498,9 +266,7 @@ const Index = () => {
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-sm">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-4 font-semibold text-foreground text-base md:text-lg">
-                  {title}
-                </h3>
+                <h3 className="mt-4 font-semibold text-foreground text-base md:text-lg">{title}</h3>
                 <p className="mt-1.5 text-sm text-foreground/60 leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -508,7 +274,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Reviews — redesigned with Instagram CTA */}
+      {/* Reviews */}
       <section className="bg-hero/40 border-t border-border">
         <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
           <div className="text-center mb-10 md:mb-14 max-w-2xl mx-auto">
@@ -527,17 +293,13 @@ const Index = () => {
               Honest words from our growing community of seekers.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {TESTIMONIALS.map((t) => (
               <figure
                 key={t.name}
                 className="relative rounded-2xl border border-border bg-background p-6 md:p-7 flex flex-col gap-4 hover:shadow-lg transition-shadow"
               >
-                <Quote
-                  className="absolute top-5 right-5 h-8 w-8 text-brand/15"
-                  aria-hidden
-                />
+                <Quote className="absolute top-5 right-5 h-8 w-8 text-brand/15" aria-hidden />
                 <div className="flex gap-0.5 text-hero-foreground" aria-label="5 star rating">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-current" />
@@ -558,7 +320,6 @@ const Index = () => {
               </figure>
             ))}
           </div>
-
           <div className="mt-10 md:mt-14 flex justify-center">
             <a
               href="https://instagram.com/hurayrahessentials"
@@ -573,44 +334,54 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-background border-t border-border">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-12 md:py-16 grid gap-10 md:grid-cols-4">
-          <div>
-            <img src={logo} alt="Hurayrah Essentials" className="h-10 w-auto object-contain mb-3" />
-            <p className="text-foreground/60 text-sm max-w-xs">
-              Seeking knowledge, made affordable. Authentic books, clothing and essentials shipped worldwide.
-            </p>
-          </div>
-          {[
-            { title: "Shop", links: ["All products", "Books", "Clothing", "Essentials"] },
-            { title: "Help", links: ["Track order", "Shipping", "Returns", "Contact"] },
-            { title: "Company", links: ["About", "Reviews", "Privacy", "Terms"] },
-          ].map((col) => (
-            <div key={col.title}>
-              <h4 className="font-semibold text-foreground mb-3 text-sm">{col.title}</h4>
-              <ul className="space-y-2 text-sm text-foreground/60">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="hover:text-brand transition-colors">
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-border">
-          <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-foreground/55">
-            <p>© {new Date().getFullYear()} Hurayrah Essentials. All rights reserved.</p>
-            <p>Made with care for the seekers of knowledge.</p>
-          </div>
-        </div>
-      </footer>
-    </main>
+    </SiteLayout>
   );
 };
+
+function CollectionSection({
+  eyebrow,
+  title,
+  blurb,
+  products,
+  ctaTo,
+  ctaLabel,
+  bgClass,
+}: {
+  eyebrow: string;
+  title: string;
+  blurb: string;
+  products: ReturnType<typeof productsByCategory>;
+  ctaTo: string;
+  ctaLabel: string;
+  bgClass: string;
+}) {
+  return (
+    <section className={`${bgClass} border-t border-border`}>
+      <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 md:mb-10">
+          <div>
+            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">{eyebrow}</p>
+            <h2 className="mt-2 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">{title}</h2>
+            <p className="mt-2 text-foreground/60 text-sm md:text-base max-w-xl">{blurb}</p>
+          </div>
+          <Link
+            to={ctaTo}
+            className="group inline-flex items-center gap-1 text-foreground text-sm md:text-base hover:text-brand transition-colors self-start md:self-auto"
+          >
+            {ctaLabel}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+        <div className="-mx-4 md:-mx-8 px-4 md:px-8 overflow-x-auto pb-3 [scrollbar-width:thin]">
+          <div className="flex gap-4 md:gap-6 min-w-max">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} className="w-[160px] sm:w-[200px] md:w-[240px] shrink-0" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default Index;
