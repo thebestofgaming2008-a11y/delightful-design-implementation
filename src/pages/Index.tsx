@@ -1,0 +1,387 @@
+import {
+  ArrowRight,
+  Star,
+  Truck,
+  Shield,
+  RotateCcw,
+  Headphones,
+  Instagram,
+  BookOpen,
+  Scroll,
+  Feather,
+  Quote,
+  Languages,
+  Scale,
+  Heart,
+} from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import calligraphyLeft from "@/assets/calligraphy-left.png";
+import calligraphyRight from "@/assets/calligraphy-right.png";
+import { SiteLayout } from "@/components/layout/SiteLayout";
+import { ProductCard } from "@/components/shop/ProductCard";
+import { CATEGORIES, PRODUCTS, productsByCategory, type CategoryKey } from "@/data/products";
+
+const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
+
+const SUBJECTS = [
+  { name: "Aqeedah", desc: "Creed & belief", Icon: Shield },
+  { name: "Seerah", desc: "The Prophet's life ﷺ", Icon: Scroll },
+  { name: "Tafsir", desc: "Qur'anic exegesis", Icon: BookOpen },
+  { name: "Hadith", desc: "Prophetic traditions", Icon: Quote },
+  { name: "Fiqh", desc: "Islamic jurisprudence", Icon: Scale },
+  { name: "Arabic", desc: "Language of the Qur'an", Icon: Languages },
+  { name: "Tazkiyah", desc: "Purification of the soul", Icon: Feather },
+  { name: "Children", desc: "For young seekers", Icon: Heart },
+];
+
+const VALUE_PROPS = [
+  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries, tracked end-to-end." },
+  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments — every order, every time." },
+  { Icon: RotateCcw, title: "Easy returns", desc: "Seven-day, hassle-free returns on every item." },
+  { Icon: Headphones, title: "Real support", desc: "Friendly humans, ready to help when you need it." },
+];
+
+const TESTIMONIALS = [
+  { quote: "Beautifully curated collection. The shipping was faster than I expected and the books arrived in perfect condition.", name: "Amina S.", role: "Verified buyer" },
+  { quote: "Authentic titles at honest prices. Hurayrah Essentials has become my go-to for building my library.", name: "Yusuf R.", role: "Verified buyer" },
+  { quote: "Quality of the clothing is excellent. Modest, comfortable and well-priced — exactly what I was looking for.", name: "Khadija M.", role: "Verified buyer" },
+];
+
+const TAB_KEYS: CategoryKey[] = ["books", "clothes", "essentials"];
+
+const Index = () => {
+  const [activeCat, setActiveCat] = useState<CategoryKey>("books");
+  const activeMeta = CATEGORIES.find((c) => c.key === activeCat)!;
+  const activeProducts = productsByCategory(activeCat);
+
+  const featured = PRODUCTS.slice(0, 4);
+  const kufi = productsByCategory("kufi");
+  const women = productsByCategory("women");
+
+  return (
+    <SiteLayout>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-hero">
+        <img
+          src={calligraphyLeft}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{ top: "-10vw", left: "-11.04vw", width: "29.04vw", height: "auto" }}
+        />
+        <img
+          src={calligraphyRight}
+          alt=""
+          aria-hidden
+          className="pointer-events-none select-none absolute opacity-90"
+          style={{ top: "-10vw", right: "-11vw", width: "28.84vw", height: "auto" }}
+        />
+
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 35%, hsl(0 0% 100% / 0.45), transparent 70%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-[1440px] px-4 py-12 md:py-20 lg:py-24 text-center">
+          <h1 className="font-bold italic tracking-tight text-foreground text-[clamp(1.75rem,5vw,5.125rem)] leading-[0.95]">
+            SEEK KNOWLEDGE
+          </h1>
+          <p className="text-hero-foreground tracking-tight text-[clamp(2.5rem,8vw,7.625rem)] leading-[0.95] -mt-1 md:-mt-2">
+            AFFORDABLY.
+          </p>
+
+          <p className="mt-4 md:mt-6 text-[hsl(0_0%_0%_/_0.65)] text-[clamp(0.875rem,1.6vw,2.375rem)] tracking-tight">
+            Seeking knowledge made easy.
+          </p>
+
+          <ul className="mt-3 md:mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[hsl(0_0%_0%_/_0.6)] text-xs sm:text-sm md:text-base">
+            {GUARANTEES.map((g) => (
+              <li key={g}>{g}</li>
+            ))}
+          </ul>
+
+          <div className="mt-7 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
+            <Link
+              to="/shop"
+              className="group inline-flex items-center justify-center gap-2 rounded-md bg-brand text-brand-foreground font-bold tracking-tight text-base md:text-lg px-10 md:px-14 py-3.5 md:py-4 shadow-2xl hover:opacity-95 transition-opacity"
+            >
+              Browse products
+              <ArrowRight className="h-4 w-4 md:h-5 md:w-5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <a
+              href="#categories"
+              className="glass-cta inline-flex items-center justify-center rounded-2xl text-hero-foreground font-bold tracking-tight text-base md:text-lg px-10 md:px-14 py-3.5 md:py-4 transition-all"
+            >
+              Check out categories
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section id="products" className="bg-hero pb-16 md:pb-24">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8">
+          <div className="flex items-end justify-between mb-6 md:mb-10">
+            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+              Featured Products
+            </h2>
+            <Link to="/shop" className="group inline-flex items-center gap-1 text-foreground text-sm md:text-base hover:text-brand transition-colors">
+              View all
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {featured.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Shop by category — tabs */}
+      <section id="categories" className="bg-background border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 md:mb-8">
+            <div>
+              <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">Shop by category</h2>
+              <p className="mt-2 text-foreground/60 text-sm md:text-base">{activeMeta.blurb}</p>
+            </div>
+            <div
+              role="tablist"
+              aria-label="Product categories"
+              className="inline-flex self-start md:self-auto rounded-full border border-border bg-hero/40 p-1"
+            >
+              {TAB_KEYS.map((key) => {
+                const meta = CATEGORIES.find((c) => c.key === key)!;
+                const active = key === activeCat;
+                return (
+                  <button
+                    key={key}
+                    role="tab"
+                    aria-selected={active}
+                    type="button"
+                    onClick={() => setActiveCat(key)}
+                    className={`px-4 md:px-5 py-2 rounded-full text-sm md:text-base font-medium transition-all ${
+                      active ? "bg-brand text-brand-foreground shadow-sm" : "text-foreground/70 hover:text-foreground"
+                    }`}
+                  >
+                    {meta.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="-mx-4 md:-mx-8 px-4 md:px-8 overflow-x-auto pb-3 [scrollbar-width:thin]">
+            <div className="flex gap-4 md:gap-6 min-w-max">
+              {activeProducts.map((p) => (
+                <ProductCard key={p.id} product={p} className="w-[160px] sm:w-[200px] md:w-[240px] shrink-0" />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Link
+              to={`/category/${activeCat}`}
+              className="group inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground font-semibold text-sm md:text-base px-6 md:px-8 py-3 hover:opacity-95 transition-opacity"
+            >
+              Shop all {activeMeta.label.toLowerCase()}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Kufi collection */}
+      <CollectionSection
+        eyebrow="Crafted with care"
+        title="The Kufi Collection"
+        blurb="Refined caps in linen, cotton and crochet — finishing touches for the everyday."
+        products={kufi}
+        ctaTo="/category/kufi"
+        ctaLabel="Shop all kufi"
+        bgClass="bg-hero/40"
+      />
+
+      {/* Women collection */}
+      <CollectionSection
+        eyebrow="For her"
+        title="Women's Essentials"
+        blurb="Modest abayas, hijabs and prayer sets in calm, considered fabrics."
+        products={women}
+        ctaTo="/category/women"
+        ctaLabel="Shop women"
+        bgClass="bg-background"
+      />
+
+      {/* Subjects */}
+      <section id="subjects" className="bg-hero/40 border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
+            <h2 className="text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">Choose your subject</h2>
+            <p className="mt-2 text-foreground/60 text-sm md:text-base">
+              Start where your heart is drawn — explore titles by field of study.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {SUBJECTS.map(({ name, desc, Icon }) => (
+              <Link
+                key={name}
+                to={`/shop?subject=${encodeURIComponent(name)}`}
+                className="group flex items-center gap-3 md:gap-4 rounded-xl border border-border bg-background p-4 md:p-5 hover:border-brand hover:shadow-md transition-all"
+              >
+                <span className="h-11 w-11 md:h-12 md:w-12 shrink-0 grid place-items-center rounded-lg bg-brand/10 text-brand group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-foreground text-sm md:text-base truncate">{name}</h3>
+                  <p className="text-xs text-foreground/55 truncate">{desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Guarantees */}
+      <section className="bg-background border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="text-center mb-8 md:mb-12 max-w-2xl mx-auto">
+            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">Our promise</p>
+            <h2 className="mt-2 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+              Shop with complete peace of mind
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            {VALUE_PROPS.map(({ Icon, title, desc }) => (
+              <div
+                key={title}
+                className="group relative overflow-hidden rounded-2xl border border-border bg-hero/30 p-6 md:p-7 hover:border-brand/40 hover:shadow-lg transition-all"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand text-brand-foreground shadow-sm">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-4 font-semibold text-foreground text-base md:text-lg">{title}</h3>
+                <p className="mt-1.5 text-sm text-foreground/60 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="bg-hero/40 border-t border-border">
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+          <div className="text-center mb-10 md:mb-14 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full bg-background border border-border px-3 py-1 text-xs font-medium text-foreground/70">
+              <span className="flex gap-0.5 text-hero-foreground">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" />
+                ))}
+              </span>
+              4.9 average from 1,200+ readers
+            </div>
+            <h2 className="mt-4 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">
+              Loved by readers worldwide
+            </h2>
+            <p className="mt-2 text-foreground/60 text-sm md:text-base">
+              Honest words from our growing community of seekers.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {TESTIMONIALS.map((t) => (
+              <figure
+                key={t.name}
+                className="relative rounded-2xl border border-border bg-background p-6 md:p-7 flex flex-col gap-4 hover:shadow-lg transition-shadow"
+              >
+                <Quote className="absolute top-5 right-5 h-8 w-8 text-brand/15" aria-hidden />
+                <div className="flex gap-0.5 text-hero-foreground" aria-label="5 star rating">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="text-foreground/85 text-sm md:text-base leading-relaxed">
+                  “{t.quote}”
+                </blockquote>
+                <figcaption className="mt-auto flex items-center gap-3">
+                  <span className="h-10 w-10 rounded-full bg-brand/10 text-brand grid place-items-center font-semibold">
+                    {t.name.charAt(0)}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">{t.name}</p>
+                    <p className="text-xs text-foreground/55">{t.role}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="mt-10 md:mt-14 flex justify-center">
+            <a
+              href="https://instagram.com/hurayrahessentials"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 rounded-full bg-foreground text-background px-6 md:px-7 py-3 md:py-3.5 font-semibold text-sm md:text-base shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+            >
+              <Instagram className="h-5 w-5" />
+              See all reviews on Instagram
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  );
+};
+
+function CollectionSection({
+  eyebrow,
+  title,
+  blurb,
+  products,
+  ctaTo,
+  ctaLabel,
+  bgClass,
+}: {
+  eyebrow: string;
+  title: string;
+  blurb: string;
+  products: ReturnType<typeof productsByCategory>;
+  ctaTo: string;
+  ctaLabel: string;
+  bgClass: string;
+}) {
+  return (
+    <section className={`${bgClass} border-t border-border`}>
+      <div className="mx-auto max-w-[1440px] px-4 md:px-8 py-14 md:py-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6 md:mb-10">
+          <div>
+            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-brand">{eyebrow}</p>
+            <h2 className="mt-2 text-foreground tracking-tight text-2xl md:text-3xl lg:text-4xl">{title}</h2>
+            <p className="mt-2 text-foreground/60 text-sm md:text-base max-w-xl">{blurb}</p>
+          </div>
+          <Link
+            to={ctaTo}
+            className="group inline-flex items-center gap-1 text-foreground text-sm md:text-base hover:text-brand transition-colors self-start md:self-auto"
+          >
+            {ctaLabel}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+        <div className="-mx-4 md:-mx-8 px-4 md:px-8 overflow-x-auto pb-3 [scrollbar-width:thin]">
+          <div className="flex gap-4 md:gap-6 min-w-max">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} className="w-[160px] sm:w-[200px] md:w-[240px] shrink-0" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Index;
