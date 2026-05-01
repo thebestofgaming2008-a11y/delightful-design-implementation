@@ -6,16 +6,23 @@ import { useShop } from "@/store/shop";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { label: "All products", to: "/shop" },
+  { label: "Shop all", to: "/shop" },
+  { label: "Track order", to: "/track" },
+  { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
+];
+
+const SHOP_CATEGORIES = [
   { label: "Books", to: "/category/books" },
   { label: "Clothing", to: "/category/clothes" },
   { label: "Kufi", to: "/category/kufi" },
   { label: "Women", to: "/category/women" },
-  { label: "Track order", to: "/track" },
+  { label: "Essentials", to: "/category/essentials" },
 ];
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const { cartCount, wishlist } = useShop();
@@ -116,7 +123,38 @@ export function SiteHeader() {
         </form>
 
         <nav className="mx-auto max-w-[1440px] px-4 md:px-8 overflow-x-auto">
-          <ul className="flex items-center justify-center gap-6 sm:gap-8 md:gap-12 text-sm md:text-base whitespace-nowrap">
+          <ul className="flex items-center justify-center gap-6 sm:gap-8 md:gap-10 text-sm md:text-base whitespace-nowrap">
+            <li
+              className="shrink-0 relative"
+              onMouseEnter={() => setShopOpen(true)}
+              onMouseLeave={() => setShopOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setShopOpen((v) => !v)}
+                className="inline-flex items-center gap-1 py-2.5 text-foreground/80 hover:text-brand transition-colors"
+                aria-haspopup="menu"
+                aria-expanded={shopOpen}
+              >
+                Categories
+                <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", shopOpen && "rotate-180")} />
+              </button>
+              {shopOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-30">
+                  <div className="min-w-[200px] rounded-xl border border-border bg-background shadow-xl py-2">
+                    {SHOP_CATEGORIES.map((c) => (
+                      <Link
+                        key={c.to}
+                        to={c.to}
+                        className="block px-4 py-2 text-sm text-foreground/80 hover:bg-hero/60 hover:text-brand transition-colors"
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </li>
             {NAV.map((link) => (
               <li key={link.to} className="shrink-0">
                 <NavLink
@@ -164,16 +202,30 @@ export function SiteHeader() {
               </button>
             </div>
             <nav className="flex flex-col">
-              {NAV.map((link) => (
+              <Link
+                to="/shop"
+                onClick={() => setMenuOpen(false)}
+                className="py-3 border-b border-border text-base text-foreground hover:text-brand transition-colors"
+              >
+                Shop all
+              </Link>
+              {SHOP_CATEGORIES.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setMenuOpen(false)}
-                  className="py-3 border-b border-border text-base text-foreground hover:text-brand transition-colors"
+                  className="py-3 pl-4 border-b border-border text-sm text-foreground/75 hover:text-brand transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/track"
+                onClick={() => setMenuOpen(false)}
+                className="py-3 border-b border-border text-base text-foreground hover:text-brand transition-colors"
+              >
+                Track order
+              </Link>
               <Link
                 to="/account"
                 onClick={() => setMenuOpen(false)}
