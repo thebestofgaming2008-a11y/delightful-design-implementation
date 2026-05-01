@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  Star,
   Truck,
   Shield,
   RotateCcw,
@@ -22,7 +21,7 @@ import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { CATEGORIES, PRODUCTS, productsByCategory, type CategoryKey } from "@/data/products";
 
-const GUARANTEES = ["Authentic titles", "International shipping", "Secure checkout"];
+const GUARANTEES = ["Authentic titles", "Worldwide shipping", "Secure checkout"];
 
 const SUBJECTS = [
   { name: "Aqeedah", desc: "Creed & belief", Icon: Shield },
@@ -36,16 +35,16 @@ const SUBJECTS = [
 ];
 
 const VALUE_PROPS = [
-  { Icon: Truck, title: "Worldwide shipping", desc: "Delivered to over 30 countries, tracked end-to-end." },
-  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments — every order, every time." },
-  { Icon: RotateCcw, title: "Easy returns", desc: "Seven-day, hassle-free returns on every item." },
-  { Icon: Headphones, title: "Real support", desc: "Friendly humans, ready to help when you need it." },
+  { Icon: Truck, title: "Worldwide shipping", desc: "Tracked delivery, end-to-end." },
+  { Icon: Shield, title: "Secure checkout", desc: "Encrypted payments, every time." },
+  { Icon: RotateCcw, title: "Easy returns", desc: "Hassle-free returns on every order." },
+  { Icon: Headphones, title: "Real support", desc: "Friendly humans, here to help." },
 ];
 
 const TESTIMONIALS = [
-  { quote: "Beautifully curated collection. The shipping was faster than I expected and the books arrived in perfect condition.", name: "Amina S.", role: "Verified buyer" },
-  { quote: "Authentic titles at honest prices. Hurayrah Essentials has become my go-to for building my library.", name: "Yusuf R.", role: "Verified buyer" },
-  { quote: "Quality of the clothing is excellent. Modest, comfortable and well-priced — exactly what I was looking for.", name: "Khadija M.", role: "Verified buyer" },
+  { quote: "Beautifully curated collection. The books arrived in perfect condition.", name: "Amina S." },
+  { quote: "Authentic titles at honest prices — my go-to for building my library.", name: "Yusuf R." },
+  { quote: "Modest, comfortable and well-priced — exactly what I was looking for.", name: "Khadija M." },
 ];
 
 const TAB_KEYS: CategoryKey[] = ["books", "clothes", "essentials"];
