@@ -146,4 +146,8 @@ All colors MUST be HSL.
       hsl(0 0% 100% / 0.6) 100%
     );
   }
+
+  /* Hide scrollbar but keep scrolling (used in horizontal nav rails) */
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 }
