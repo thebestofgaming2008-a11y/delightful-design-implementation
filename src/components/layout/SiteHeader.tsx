@@ -12,7 +12,7 @@ export function SiteHeader() {
   const [mobileBooksOpen, setMobileBooksOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const { cartCount, wishlist } = useShop();
+  const { cartCount, wishlist, setCartOpen, setWishOpen } = useShop();
   const booksRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -80,9 +80,10 @@ export function SiteHeader() {
           </Link>
 
           <div className="flex items-center gap-0.5 sm:gap-1">
-            <Link
-              to="/wishlist"
-              aria-label="Wishlist"
+            <button
+              type="button"
+              onClick={() => setWishOpen(true)}
+              aria-label="Open wishlist"
               className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
             >
               <Heart className="h-5 w-5" />
@@ -91,7 +92,7 @@ export function SiteHeader() {
                   {wishlist.length}
                 </span>
               )}
-            </Link>
+            </button>
             <Link
               to="/account"
               aria-label="Account"
@@ -99,16 +100,17 @@ export function SiteHeader() {
             >
               <User className="h-5 w-5" />
             </Link>
-            <Link
-              to="/cart"
-              aria-label="Cart"
+            <button
+              type="button"
+              onClick={() => setCartOpen(true)}
+              aria-label="Open cart"
               className="relative inline-flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 transition-colors"
             >
               <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
               <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] px-1 grid place-items-center rounded-full bg-brand text-brand-foreground text-[10px] font-semibold">
                 {cartCount}
               </span>
-            </Link>
+            </button>
           </div>
         </div>
 

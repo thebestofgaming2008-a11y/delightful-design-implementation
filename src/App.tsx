@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ShopProvider } from "@/store/shop";
+import { CartPeek, WishlistPeek } from "@/components/shop/QuickPeekDrawers";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Shop from "./pages/Shop.tsx";
@@ -30,6 +31,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ShopProvider>
+          <CartPeek />
+          <WishlistPeek />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/shop" element={<Shop />} />

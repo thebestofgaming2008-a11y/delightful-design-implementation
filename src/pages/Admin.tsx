@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { LayoutDashboard, Package, ShoppingBag, Users, Settings, TrendingUp, IndianRupee } from "lucide-react";
+import { useMemo, useState } from "react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Settings, TrendingUp, IndianRupee, Search, Filter } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { PRODUCTS } from "@/data/products";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,21 @@ const RECENT_ORDERS = [
 
 const Admin = () => {
   const [tab, setTab] = useState<(typeof NAV)[number]["key"]>("dash");
+  const [productQuery, setProductQuery] = useState("");
+  const [orderStatus, setOrderStatus] = useState<"all" | "Paid" | "Shipped" | "Pending">("all");
+
+  const filteredProducts = useMemo(
+    () =>
+      PRODUCTS.filter((p) =>
+        p.title.toLowerCase().includes(productQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(productQuery.toLowerCase()),
+      ),
+    [productQuery],
+  );
+  const filteredOrders = useMemo(
+    () => (orderStatus === "all" ? RECENT_ORDERS : RECENT_ORDERS.filter((o) => o.status === orderStatus)),
+    [orderStatus],
+  );
 
   return (
     <SiteLayout>
@@ -44,13 +59,13 @@ const Admin = () => {
         </div>
 
         <div className="grid md:grid-cols-[220px_1fr] gap-6">
-          <aside className="rounded-2xl border border-border bg-background p-2 h-fit">
+          <aside className="rounded-2xl border border-border bg-background p-2 h-fit md:sticky md:top-4 flex md:block overflow-x-auto no-scrollbar">
             {NAV.map(({ key, label, Icon }) => (
               <button
                 key={key}
                 onClick={() => setTab(key)}
                 className={cn(
-                  "w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors",
+                  "text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors shrink-0 md:w-full",
                   tab === key ? "bg-brand text-brand-foreground" : "text-foreground/75 hover:bg-foreground/5",
                 )}
               >
@@ -81,7 +96,24 @@ const Admin = () => {
             )}
             {tab === "orders" && (
               <Section title="All orders">
-                <OrdersTable rows={RECENT_ORDERS} />
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <Filter className="h-4 w-4 text-foreground/55" />
+                  {(["all", "Paid", "Shipped", "Pending"] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setOrderStatus(s)}
+                      className={cn(
+                        "rounded-full px-3 py-1 text-xs font-medium border transition-colors",
+                        orderStatus === s
+                          ? "bg-brand text-brand-foreground border-brand"
+                          : "border-border text-foreground/70 hover:bg-foreground/5",
+                      )}
+                    >
+                      {s === "all" ? "All" : s}
+                    </button>
+                  ))}
+                </div>
+                <OrdersTable rows={filteredOrders} />
               </Section>
             )}
             {tab === "products" && (
@@ -89,6 +121,20 @@ const Admin = () => {
                 title="Products"
                 action={<button className="rounded-md bg-brand text-brand-foreground text-sm font-semibold px-4 py-2 hover:opacity-95">+ Add product</button>}
               >
+                <label className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 mb-3 focus-within:border-brand transition-colors">
+                  <Search className="h-4 w-4 text-foreground/55" />
+                  <input
+                    value={productQuery}
+                    onChange={(e) => setProductQuery(e.target.value)}
+                    placeholder="Search products by name or category..."
+                    className="bg-transparent flex-1 text-sm outline-none"
+                  />
+                  {productQuery && (
+                    <button onClick={() => setProductQuery("")} className="text-xs text-foreground/55 hover:text-foreground">
+                      Clear
+                    </button>
+                  )}
+                </label>
                 <div className="overflow-x-auto -mx-2">
                   <table className="w-full text-sm">
                     <thead>
@@ -100,7 +146,7 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {PRODUCTS.slice(0, 10).map((p) => (
+                      {filteredProducts.slice(0, 12).map((p) => (
                         <tr key={p.id} className="border-b border-border last:border-0">
                           <td className="py-3 px-2 font-medium">{p.title}</td>
                           <td className="py-3 px-2 capitalize text-foreground/70">{p.category}</td>
@@ -108,6 +154,13 @@ const Admin = () => {
                           <td className="py-3 px-2 text-foreground/70">In stock</td>
                         </tr>
                       ))}
+                      {filteredProducts.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="py-8 text-center text-sm text-foreground/55">
+                            No products match "{productQuery}"
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

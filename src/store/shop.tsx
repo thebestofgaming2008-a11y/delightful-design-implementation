@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { PRODUCTS, type Product } from "@/data/products";
 
 export interface CartItem {
@@ -19,6 +19,10 @@ interface ShopState {
   cartCount: number;
   cartSubtotal: number;
   cartLines: { product: Product; qty: number }[];
+  cartOpen: boolean;
+  setCartOpen: (v: boolean) => void;
+  wishOpen: boolean;
+  setWishOpen: (v: boolean) => void;
 }
 
 const ShopContext = createContext<ShopState | null>(null);
@@ -38,6 +42,8 @@ function load<T>(k: string, fallback: T): T {
 export function ShopProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>(() => load<CartItem[]>(KEY_CART, []));
   const [wishlist, setWishlist] = useState<string[]>(() => load<string[]>(KEY_WISH, []));
+  const [cartOpen, setCartOpen] = useState(false);
+  const [wishOpen, setWishOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(KEY_CART, JSON.stringify(cart));
@@ -53,7 +59,11 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       return [...prev, { productId: id, qty }];
     });
     const p = PRODUCTS.find((x) => x.id === id);
-    toast({ title: "Added to cart", description: p?.title ?? "Item added" });
+    toast.success(p?.title ?? "Item added", {
+      description: "Added to your cart",
+      duration: 2500,
+      action: { label: "View", onClick: () => setCartOpen(true) },
+    });
   }, []);
 
   const removeFromCart = useCallback((id: string) => {
@@ -71,10 +81,13 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
   const toggleWishlist = useCallback((id: string) => {
     setWishlist((prev) => {
       if (prev.includes(id)) {
-        toast({ title: "Removed from wishlist" });
+        toast("Removed from wishlist", { duration: 1800 });
         return prev.filter((x) => x !== id);
       }
-      toast({ title: "Saved to wishlist" });
+      toast.success("Saved to wishlist", {
+        duration: 2500,
+        action: { label: "View", onClick: () => setWishOpen(true) },
+      });
       return [...prev, id];
     });
   }, []);
@@ -110,6 +123,10 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     cartCount,
     cartSubtotal,
     cartLines,
+    cartOpen,
+    setCartOpen,
+    wishOpen,
+    setWishOpen,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

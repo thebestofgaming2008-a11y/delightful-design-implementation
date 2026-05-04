@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { User, Package, Heart, MapPin, LogOut } from "lucide-react";
+import { User, Package, Heart, MapPin, LogOut, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+import { useShop } from "@/store/shop";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -19,35 +20,58 @@ const ORDERS = [
 
 const Account = () => {
   const [tab, setTab] = useState<(typeof TABS)[number]["key"]>("overview");
+  const { wishlist, cartCount } = useShop();
+  const initials = "YR";
 
   return (
     <SiteLayout>
       <div className="mx-auto max-w-[1200px] px-4 md:px-8 py-8 md:py-12">
-        <div className="flex items-end justify-between mb-6 md:mb-10">
-          <div>
-            <h1 className="text-foreground italic font-bold tracking-tight text-2xl md:text-4xl">My account</h1>
-            <p className="text-foreground/60 text-sm mt-1">Welcome back, Yusuf</p>
+        <div className="rounded-2xl bg-hero/40 border border-border p-5 md:p-7 mb-6 md:mb-8 flex items-center gap-4 md:gap-5">
+          <div className="h-14 w-14 md:h-16 md:w-16 rounded-full bg-brand text-brand-foreground grid place-items-center font-bold text-lg shrink-0">
+            {initials}
           </div>
-          <Link to="/login" className="text-sm text-foreground/60 hover:text-brand inline-flex items-center gap-1">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-foreground italic font-bold tracking-tight text-xl md:text-3xl truncate">
+              Welcome back, Yusuf
+            </h1>
+            <p className="text-foreground/60 text-xs md:text-sm mt-0.5">yusuf@example.com</p>
+          </div>
+          <Link
+            to="/login"
+            className="hidden sm:inline-flex text-sm text-foreground/60 hover:text-brand items-center gap-1 shrink-0"
+          >
             <LogOut className="h-4 w-4" /> Sign out
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-[220px_1fr] gap-8">
-          <aside className="rounded-2xl border border-border bg-background p-2 h-fit">
+        <div className="grid grid-cols-3 gap-2 md:gap-3 mb-6 md:mb-8">
+          <StatPill label="Orders" value="3" />
+          <StatPill label="Wishlist" value={String(wishlist.length)} />
+          <StatPill label="In cart" value={String(cartCount)} />
+        </div>
+
+        <div className="grid md:grid-cols-[220px_1fr] gap-6 md:gap-8">
+          <aside className="rounded-2xl border border-border bg-background p-2 h-fit md:sticky md:top-4 flex md:block overflow-x-auto no-scrollbar">
             {TABS.map(({ key, label, Icon }) => (
               <button
                 key={key}
                 onClick={() => setTab(key)}
                 className={cn(
-                  "w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors",
+                  "w-full text-left px-3 py-2.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors shrink-0 md:w-full",
                   tab === key ? "bg-brand text-brand-foreground" : "text-foreground/75 hover:bg-foreground/5",
                 )}
               >
                 <Icon className="h-4 w-4" />
                 {label}
+                <ChevronRight className="h-4 w-4 ml-auto opacity-0 md:opacity-40 hidden md:inline" />
               </button>
             ))}
+            <Link
+              to="/login"
+              className="sm:hidden md:flex md:mt-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground/60 hover:bg-foreground/5 items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" /> Sign out
+            </Link>
           </aside>
 
           <div>
@@ -93,6 +117,15 @@ function Card({ title, children, className }: { title: string; children: React.R
       <h2 className="font-semibold text-foreground text-base mb-3">{title}</h2>
       {children}
     </section>
+  );
+}
+
+function StatPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border bg-background px-3 py-3 text-center">
+      <p className="text-lg md:text-xl font-bold text-hero-foreground leading-none">{value}</p>
+      <p className="text-[11px] md:text-xs text-foreground/55 mt-1">{label}</p>
+    </div>
   );
 }
 
