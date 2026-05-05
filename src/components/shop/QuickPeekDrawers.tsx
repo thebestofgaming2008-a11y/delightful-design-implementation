@@ -8,10 +8,12 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useShop } from "@/store/shop";
-import { formatPrice, PRODUCTS } from "@/data/products";
+import { PRODUCTS } from "@/data/products";
+import { useFormatPrice } from "@/store/currency";
 
 export function CartPeek() {
   const { cartOpen, setCartOpen, cartLines, cartSubtotal, updateQty, removeFromCart, cartCount } = useShop();
+  const formatPrice = useFormatPrice();
   const shipping = cartSubtotal > 999 || cartSubtotal === 0 ? 0 : 99;
   const total = cartSubtotal + shipping;
 
@@ -124,6 +126,7 @@ export function CartPeek() {
 
 export function WishlistPeek() {
   const { wishOpen, setWishOpen, wishlist, toggleWishlist, addToCart } = useShop();
+  const formatPrice = useFormatPrice();
   const items = PRODUCTS.filter((p) => wishlist.includes(p.id));
 
   return (

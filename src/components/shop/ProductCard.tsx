@@ -1,7 +1,8 @@
 import { Heart, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useShop } from "@/store/shop";
-import { type Product, formatPrice } from "@/data/products";
+import { type Product } from "@/data/products";
+import { useFormatPrice } from "@/store/currency";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 export function ProductCard({ product, className }: Props) {
   const { toggleWishlist, isWishlisted, addToCart } = useShop();
   const wished = isWishlisted(product.id);
+  const formatPrice = useFormatPrice();
 
   return (
     <article className={cn("group", className)}>

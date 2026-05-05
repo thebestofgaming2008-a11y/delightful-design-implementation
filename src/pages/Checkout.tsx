@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Lock } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { useShop } from "@/store/shop";
-import { formatPrice } from "@/data/products";
+import { useFormatPrice } from "@/store/currency";
 
 const Checkout = () => {
   const { cartLines, cartSubtotal, clearCart } = useShop();
+  const formatPrice = useFormatPrice();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const shipping = cartSubtotal > 999 || cartSubtotal === 0 ? 0 : 99;

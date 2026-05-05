@@ -3,14 +3,16 @@ import { useState } from "react";
 import { Heart, ShoppingBag, Star, Truck, RotateCcw, Shield, ChevronRight, Minus, Plus } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { getProduct, productsByCategory, formatPrice } from "@/data/products";
+import { getProduct, productsByCategory } from "@/data/products";
 import { useShop } from "@/store/shop";
+import { useFormatPrice } from "@/store/currency";
 import { cn } from "@/lib/utils";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = id ? getProduct(id) : undefined;
   const { addToCart, toggleWishlist, isWishlisted } = useShop();
+  const formatPrice = useFormatPrice();
   const [qty, setQty] = useState(1);
 
   if (!product) return <Navigate to="/shop" replace />;
