@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ShopProvider } from "@/store/shop";
+import { CurrencyProvider } from "@/store/currency";
 import { CartPeek, WishlistPeek } from "@/components/shop/QuickPeekDrawers";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -30,6 +31,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <CurrencyProvider>
         <ShopProvider>
           <CartPeek />
           <WishlistPeek />
@@ -53,6 +55,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ShopProvider>
+        </CurrencyProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

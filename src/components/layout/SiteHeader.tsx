@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo-header.png";
 import { useShop } from "@/store/shop";
+import { useCurrency, CURRENCIES, type CurrencyCode } from "@/store/currency";
 import { SUBJECTS } from "@/data/products";
 import { cn } from "@/lib/utils";
 
@@ -10,10 +11,13 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [booksOpen, setBooksOpen] = useState(false);
   const [mobileBooksOpen, setMobileBooksOpen] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const { cartCount, wishlist, setCartOpen, setWishOpen } = useShop();
+  const { currency, setCurrency, symbol, loading, updatedAt } = useCurrency();
   const booksRef = useRef<HTMLLIElement>(null);
+  const currencyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -24,6 +28,7 @@ export function SiteHeader() {
     };
     const onClick = (e: MouseEvent) => {
       if (booksRef.current && !booksRef.current.contains(e.target as Node)) setBooksOpen(false);
+      if (currencyRef.current && !currencyRef.current.contains(e.target as Node)) setCurrencyOpen(false);
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("mousedown", onClick);
@@ -51,15 +56,49 @@ export function SiteHeader() {
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-2 px-3 sm:px-4 py-2 text-[11px] sm:text-xs md:text-sm">
           <span className="hidden sm:block w-[80px]" aria-hidden />
           <p className="flex-1 text-center truncate">International orders may incur customs/import duties</p>
-          <button
-            type="button"
-            className="flex items-center gap-1 rounded-sm px-2 py-0.5 hover:bg-white/10 transition-colors shrink-0"
-            aria-label="Select currency"
-          >
-            <ChevronDown className="h-3 w-3" />
-            <span className="font-medium">INR</span>
-            <span>₹</span>
-          </button>
+          <div className="relative shrink-0" ref={currencyRef}>
+            <button
+              type="button"
+              onClick={() => setCurrencyOpen((v) => !v)}
+              className="flex items-center gap-1 rounded-sm px-2 py-0.5 hover:bg-white/10 transition-colors"
+              aria-label="Select currency"
+              aria-expanded={currencyOpen}
+            >
+              <ChevronDown className={cn("h-3 w-3 transition-transform", currencyOpen && "rotate-180")} />
+              <span className="font-medium">{currency}</span>
+              <span>{symbol}</span>
+            </button>
+            {currencyOpen && (
+              <div className="absolute top-full right-0 mt-1.5 z-40 w-[240px] rounded-xl border border-border bg-background text-foreground shadow-2xl overflow-hidden">
+                <div className="px-3 py-2 border-b border-border flex items-center justify-between">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-foreground/55">Currency</span>
+                  <span className="text-[10px] text-foreground/45">
+                    {loading ? "Updating…" : updatedAt ? `Live · ${new Date(updatedAt).toLocaleDateString()}` : "Live rates"}
+                  </span>
+                </div>
+                <ul className="max-h-[260px] overflow-y-auto py-1">
+                  {CURRENCIES.map((c) => (
+                    <li key={c.code}>
+                      <button
+                        type="button"
+                        onClick={() => { setCurrency(c.code as CurrencyCode); setCurrencyOpen(false); }}
+                        className={cn(
+                          "w-full flex items-center justify-between gap-2 px-3 py-2 text-sm text-left hover:bg-hero/60 transition-colors",
+                          currency === c.code && "bg-hero/40 font-semibold text-brand",
+                        )}
+                      >
+                        <span className="flex items-center gap-2">
+                          <span className="w-6 text-foreground/60">{c.symbol}</span>
+                          <span>{c.code}</span>
+                        </span>
+                        <span className="text-xs text-foreground/55 truncate">{c.label}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

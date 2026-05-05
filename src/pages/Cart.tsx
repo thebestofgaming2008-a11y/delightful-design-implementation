@@ -2,10 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { useShop } from "@/store/shop";
-import { formatPrice } from "@/data/products";
+import { useFormatPrice } from "@/store/currency";
 
 const Cart = () => {
   const { cartLines, cartSubtotal, updateQty, removeFromCart } = useShop();
+  const formatPrice = useFormatPrice();
   const navigate = useNavigate();
   const shipping = cartSubtotal > 999 || cartSubtotal === 0 ? 0 : 99;
   const total = cartSubtotal + shipping;
